@@ -1,18 +1,18 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Shop.Data;
+using System;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 using Shop.Models;
+using Shop.Data;
 using Shop.Services;
 
 namespace Shop.Controllers
 {
-    [Route("users")]
-    public class UserController : ControllerBase
+    [Route("v1/users")]
+    public class UserController : Controller
     {
         [HttpGet]
         [Route("")]
@@ -32,7 +32,7 @@ namespace Shop.Controllers
         // [Authorize(Roles = "manager")]
         public async Task<ActionResult<User>> Post(
             [FromServices] DataContext context,
-            [FromBody] User model)
+            [FromBody]User model)
         {
             // Verifica se os dados são válidos
             if (!ModelState.IsValid)
@@ -63,7 +63,7 @@ namespace Shop.Controllers
         public async Task<ActionResult<User>> Put(
             [FromServices] DataContext context,
             int id,
-            [FromBody] User model)
+            [FromBody]User model)
         {
             // Verifica se os dados são válidos
             if (!ModelState.IsValid)
@@ -82,6 +82,7 @@ namespace Shop.Controllers
             catch (Exception)
             {
                 return BadRequest(new { message = "Não foi possível criar o usuário" });
+
             }
         }
 
@@ -90,7 +91,7 @@ namespace Shop.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<dynamic>> Authenticate(
                     [FromServices] DataContext context,
-                    [FromBody] User model)
+                    [FromBody]User model)
         {
             var user = await context.Users
                 .AsNoTracking()
